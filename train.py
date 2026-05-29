@@ -363,7 +363,7 @@ def main():
     parser.add_argument('--epochs', type=int, default=25, help='Number of epochs')
     parser.add_argument('--batch_size', type=int, default=32, help='Batch size')
     parser.add_argument('--lr', type=float, default=1e-4, help='Learning rate')
-    parser.add_argument('--data_root', type=str, default='aims-dtu/Covid-19 dataset',
+    parser.add_argument('--data_root', type=str, default='D:/AIMS-DTU/COVID_19_dataset',
                         help='Path to dataset')
     
     args = parser.parse_args()
