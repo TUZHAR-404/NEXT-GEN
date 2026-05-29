@@ -119,7 +119,11 @@ def train_epoch(
     total_loss = 0
     progress_bar = tqdm(train_loader, desc=f"Epoch {current_epoch+1}/{total_epochs} [TRAIN]")
     
-    for batch_idx, (images, labels, _) in enumerate(progress_bar):
+    for batch_idx, batch in enumerate(progress_bar):
+        if len(batch) == 3:
+            images, labels, _ = batch
+        else:
+            images, labels = batch
         images, labels = images.to(device), labels.to(device)
         
         # Forward pass
@@ -157,7 +161,11 @@ def validate(
     progress_bar = tqdm(val_loader, desc=f"Epoch {current_epoch+1}/{total_epochs} [VAL]")
     
     with torch.no_grad():
-        for images, labels, _ in progress_bar:
+        for batch in progress_bar:
+            if len(batch) == 3:
+                images, labels, _ = batch
+            else:
+                images, labels = batch
             images, labels = images.to(device), labels.to(device)
             
             outputs = model(images)
@@ -201,7 +209,11 @@ def test(
     progress_bar = tqdm(test_loader, desc="Testing")
     
     with torch.no_grad():
-        for images, labels, _ in progress_bar:
+        for batch in progress_bar:
+            if len(batch) == 3:
+                images, labels, _ = batch
+            else:
+                images, labels = batch
             images, labels = images.to(device), labels.to(device)
             
             outputs = model(images)
