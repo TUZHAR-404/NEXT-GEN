@@ -50,3 +50,43 @@ def get_dataloaders(
     logger.info(f"Train: {len(train_dataset)} | Val: {len(val_dataset)} | Test: {len(test_dataset)}")
 
     return train_loader, val_loader, test_loader
+
+
+def load_dataset(
+    data_root: Path | str = Path("data"),
+    batch_size: int = 32,
+    image_size: int = 224,
+    seed: int = 42,
+) -> tuple:
+    """Compatibility wrapper used by other modules.
+
+    Returns (train_loader, val_loader, test_loader, metadata)
+    where metadata contains `class_names` and sample counts.
+    """
+    if isinstance(data_root, str):
+        data_root = Path(data_root)
+
+    train_loader, val_loader, test_loader = get_dataloaders(
+        data_root, batch_size=batch_size, image_size=image_size, seed=seed
+    )
+
+    def _dataset_len(loader: DataLoader) -> int:
+        try:
+            return len(loader.dataset)
+        except Exception:
+            return -1
+
+    class_names = None
+    try:
+        class_names = train_loader.dataset.classes  # type: ignore[attr-defined]
+    except Exception:
+        class_names = None
+
+    metadata = {
+        "class_names": class_names,
+        "train_samples": _dataset_len(train_loader),
+        "val_samples": _dataset_len(val_loader),
+        "test_samples": _dataset_len(test_loader),
+    }
+
+    return train_loader, val_loader, test_loader, metadata
