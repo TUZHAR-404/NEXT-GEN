@@ -57,6 +57,7 @@ def load_dataset(
     batch_size: int = 32,
     image_size: int = 224,
     seed: int = 42,
+    **kwargs,
 ) -> tuple:
     """Compatibility wrapper used by other modules.
 
